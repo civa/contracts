@@ -1,16 +1,11 @@
-const hre = require('hardhat');
+const path = require('path');
+const bre = require('@nomiclabs/buidler');
 
-const { getCompilersDir } = require('hardhat/internal/util/global-dir');
-const { CompilerDownloader } = require('hardhat/internal/solidity/compiler/downloader');
-const { Compiler } = require('hardhat/internal/solidity/compiler');
+const { Compiler } = require('@nomiclabs/buidler/internal/solidity/compiler');
 
-const [{ version }] = hre.config.solidity.compilers;
+const compiler = new Compiler(
+  bre.config.solc.version,
+  path.join(bre.config.paths.cache, 'compilers'),
+);
 
-async function getSolc () {
-  const downloader = new CompilerDownloader(await getCompilersDir(), { forceSolcJs: true });
-  const { compilerPath } = await downloader.getDownloadedCompilerPath(version);
-  const compiler = new Compiler(compilerPath);
-  return compiler.getSolc();
-}
-
-module.exports = Object.assign(getSolc(), { __esModule: true });
+module.exports = Object.assign(compiler.getSolc(), { __esModule: true });

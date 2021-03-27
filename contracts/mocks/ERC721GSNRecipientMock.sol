@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity >=0.6.0 <0.8.0;
 
 import "../token/ERC721/ERC721.sol";
 import "../GSN/GSNRecipient.sol";
@@ -12,6 +12,7 @@ import "../GSN/GSNRecipientSignature.sol";
  */
 contract ERC721GSNRecipientMock is ERC721, GSNRecipient, GSNRecipientSignature {
     constructor(string memory name, string memory symbol, address trustedSigner)
+        public
         ERC721(name, symbol)
         GSNRecipientSignature(trustedSigner)
     { }
@@ -20,7 +21,7 @@ contract ERC721GSNRecipientMock is ERC721, GSNRecipient, GSNRecipientSignature {
         _mint(_msgSender(), tokenId);
     }
 
-    function _msgSender() internal view override(Context, GSNRecipient) returns (address) {
+    function _msgSender() internal view override(Context, GSNRecipient) returns (address payable) {
         return GSNRecipient._msgSender();
     }
 
